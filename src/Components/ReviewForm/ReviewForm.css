@@ -1,0 +1,102 @@
+/* src/Components/ReviewForm/ReviewForm.css */
+
+.review-form-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 450px;
+    margin: 20px auto; /* Centers the form */
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.review-form-container h3 {
+    margin-top: 0;
+    color: #3685fb;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.doctor-speciality {
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+/* Star Rating Styling */
+.rating-group .stars {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.rating-group .star {
+    margin-right: 5px;
+    transition: color 0.2s;
+}
+
+.rating-group .star.active,
+.rating-group .star:hover {
+    color: gold;
+}
+
+.submit-button {
+    background-color: #3685fb;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #2170e8;
+}
+
+.success-message {
+    padding: 20px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 600;
+}

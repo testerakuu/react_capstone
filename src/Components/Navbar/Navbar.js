@@ -1,4 +1,5 @@
 // src/Components/Navbar/Navbar.js
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
@@ -13,11 +14,17 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
+        // Clear all stored authentication and user details
         sessionStorage.removeItem("auth-token");
         sessionStorage.removeItem("name");
         sessionStorage.removeItem("email");
         sessionStorage.removeItem("phone");
         
+        // Clear persistent appointment data
+        localStorage.removeItem("doctorData");
+        sessionStorage.removeItem("appointmentData");
+
+        // Redirect to home page and force a full reload to clear state/Navbar display
         navigate("/");
         window.location.reload(); 
     };
@@ -25,7 +32,7 @@ const Navbar = () => {
     // Conditional check for login status
     const isUserLoggedIn = sessionStorage.getItem("auth-token") !== null;
 
-    // *** NEW HELPER FUNCTION: Extracts the name from the stored email ***
+    // Helper Function: Extracts the name from the stored email for display
     const getUsername = () => {
         const userEmail = sessionStorage.getItem("email");
         if (userEmail) {
@@ -47,7 +54,7 @@ const Navbar = () => {
 
     return (
         <nav>
-            {/* Navigation logo section (same as before) */}
+            {/* Navigation logo section */}
             <div className="nav__logo">
               <Link to="/"> 
                 StayHealthy 
@@ -66,7 +73,7 @@ const Navbar = () => {
               <span>.</span>
             </div>
             
-            {/* Navigation icon section (same as before) */}
+            {/* Navigation icon section */}
             <div className="nav__icon" onClick={handleClick}>
               <i className={`fa ${isActive ? 'fa-times' : 'fa-bars'}`}></i>
             </div>
@@ -78,11 +85,17 @@ const Navbar = () => {
                     <Link to="/">Home</Link>
                 </li>
               
+                {/* Link to the Instant Consultation page */}
                 <li className="link">
                     <Link to="/instant-consultation">Appointments</Link> 
                 </li>
+                
+                {/* Link to the new Reviews page */}
+                <li className="link">
+                    <Link to="/reviews">Reviews</Link> 
+                </li>
               
-                {/* *** CONDITIONAL RENDERING BLOCK: Display Name and Logout *** */}
+                {/* CONDITIONAL RENDERING BLOCK: Display Name and Logout/Login/Sign Up */}
                 {isUserLoggedIn ? (
                     <>
                         <li className="link user-name-display" style={{ marginRight: '10px', color: '#3685fb', fontWeight: 'bold' }}>
@@ -110,7 +123,7 @@ const Navbar = () => {
                         </li>
                     </>
                 )}
-                {/* *** CONDITIONAL RENDERING BLOCK END *** */}
+                {/* END CONDITIONAL RENDERING BLOCK */}
             </ul>
         </nav>
     );

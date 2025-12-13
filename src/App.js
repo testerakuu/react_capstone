@@ -16,7 +16,8 @@ import Login from './Components/Login/Login';
 import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
 
 // *** NEW IMPORT ***
-import Notification from './Components/Notification/Notification'; 
+import Notification from './Components/Notification/Notification';
+import Reviews from './Components/Reviews/Reviews'; 
 
 
 // Function component for the main App
@@ -47,6 +48,9 @@ function App() {
 
                 {/* 4. Define the Instant Consultation route */}
                 <Route path="/instant-consultation" element={<InstantConsultation/>}/>
+
+                {/* 5. Define the Reviews route */}
+                <Route path="/reviews" element={<Reviews/>}/>
 
               </Routes>
           </Notification>
