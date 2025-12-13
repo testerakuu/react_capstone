@@ -1,22 +1,38 @@
-import React, { useState } from 'react'; // 1. Import useState
-import { Link } from 'react-router-dom'; // 2. Import Link for navigation
-import './Navbar.css'; // Import the CSS file
+// src/Components/Navbar/Navbar.js
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // *** Added useNavigate ***
+import './Navbar.css';
 
 // Define the functional component
 const Navbar = () => {
-    // 3. Use State to manage the active/inactive state of the mobile menu
     const [isActive, setIsActive] = useState(false);
+    const navigate = useNavigate(); // *** Initialize useNavigate for logout redirect ***
 
-    // 4. Define the handleClick function to toggle the state
+    // Function to toggle the state of the mobile menu
     const handleClick = () => {
-        setIsActive(!isActive); // Toggle the state (true/false)
+        setIsActive(!isActive);
     };
+
+    // *** 1. LOGOUT FUNCTION: Clears session and redirects ***
+    const handleLogout = () => {
+        sessionStorage.removeItem("auth-token");
+        sessionStorage.removeItem("name");
+        sessionStorage.removeItem("email");
+        sessionStorage.removeItem("phone");
+        
+        // Redirect to home page and force a reload to update the Navbar state
+        navigate("/");
+        window.location.reload(); 
+    };
+
+    // *** 2. CONDITIONAL CHECK: Determine if the user is logged in ***
+    // This will be true if the 'auth-token' exists in sessionStorage
+    const isUserLoggedIn = sessionStorage.getItem("auth-token") !== null;
 
     return (
         <nav>
             {/* Navigation logo section */}
             <div className="nav__logo">
-              {/* Use Link to navigate to the base path */}
               <Link to="/"> 
                 StayHealthy 
                 {/* SVG Icon (JSX format) */}
@@ -36,7 +52,6 @@ const Navbar = () => {
             
             {/* Navigation icon section with an onClick event listener */}
             <div className="nav__icon" onClick={handleClick}>
-              {/* Dynamically switch icons based on the 'isActive' state */}
               <i className={`fa ${isActive ? 'fa-times' : 'fa-bars'}`}></i>
             </div>
 
@@ -53,19 +68,31 @@ const Navbar = () => {
                     <a href="google.com">Appointments</a> 
                 </li>
               
-                {/* Sign Up link (Using Link to navigate to the /signup route) */}
-                <li className="link">
-                    <Link to="/signup"> 
-                        <button className="btn1">Sign Up</button>
-                    </Link>
-                </li>
-              
-                {/* Login link (Using Link to navigate to the /login route) */}
-                <li className="link">
-                    <Link to="/login">
-                        <button className="btn1">Login</button>
-                    </Link>
-                </li>
+                {/* *** CONDITIONAL RENDERING BLOCK START *** */}
+                {isUserLoggedIn ? (
+                    // Display LOGOUT button if user is logged in
+                    <li className="link">
+                        <button className="btn1" onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </li>
+                ) : (
+                    // Display SIGN UP and LOGIN buttons if user is NOT logged in
+                    <>
+                        <li className="link">
+                            <Link to="/signup"> 
+                                <button className="btn1">Sign Up</button>
+                            </Link>
+                        </li>
+                      
+                        <li className="link">
+                            <Link to="/login">
+                                <button className="btn1">Login</button>
+                            </Link>
+                        </li>
+                    </>
+                )}
+                {/* *** CONDITIONAL RENDERING BLOCK END *** */}
             </ul>
         </nav>
     );
