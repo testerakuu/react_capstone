@@ -1,4 +1,4 @@
-// src/App.js
+// src/App.js - COMPLETE AND UPDATED CODE
 
 // Import necessary modules from React library
 import React from 'react';
@@ -12,8 +12,11 @@ import LandingPage from './Components/LandingPage/LandingPage';
 import SignUp from './Components/Sign_Up/Sign_Up';               
 import Login from './Components/Login/Login';                   
 
-// *** NEW IMPORT ***
+// Import the Instant Consultation component
 import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
+
+// *** NEW IMPORT ***
+import Notification from './Components/Notification/Notification'; 
 
 
 // Function component for the main App
@@ -28,22 +31,25 @@ function App() {
           {/* Display the Navbar component outside of Routes so it shows on every page */}
           <Navbar/>
 
-          {/* Set up the Routes for different pages */}
-          <Routes>
-            
-            {/* 1. Define the Home route */}
-            <Route path="/" element={<LandingPage/>}/>
-            
-            {/* 2. Define the Sign Up route */}
-            <Route path="/signup" element={<SignUp/>}/>
-            
-            {/* 3. Define the Login route */}
-            <Route path="/login" element={<Login/>}/>
+          {/* *** WRAP ROUTES WITH NOTIFICATION COMPONENT *** */}
+          <Notification> 
+              {/* Set up the Routes for different pages */}
+              <Routes>
+                
+                {/* 1. Define the Home route */}
+                <Route path="/" element={<LandingPage/>}/>
+                
+                {/* 2. Define the Sign Up route */}
+                <Route path="/signup" element={<SignUp/>}/>
+                
+                {/* 3. Define the Login route */}
+                <Route path="/login" element={<Login/>}/>
 
-            {/* 4. *** NEW ROUTE for Instant Consultation *** */}
-            <Route path="/instant-consultation" element={<InstantConsultation/>}/>
+                {/* 4. Define the Instant Consultation route */}
+                <Route path="/instant-consultation" element={<InstantConsultation/>}/>
 
-          </Routes>
+              </Routes>
+          </Notification>
         </BrowserRouter>
     </>
   );
