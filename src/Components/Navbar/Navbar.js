@@ -1,12 +1,15 @@
-// src/Components/Navbar/Navbar.js
+// src/Components/Navbar/Navbar.js - COMPLETE AND FINAL CODE
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
+import ProfileCard from '../ProfileCard/ProfileCard'; // Import the new ProfileCard component
 
 // Define the functional component
 const Navbar = () => {
     const [isActive, setIsActive] = useState(false);
+    // State to toggle the visibility of the ProfileCard dropdown
+    const [showProfileCard, setShowProfileCard] = useState(false); 
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -29,6 +32,11 @@ const Navbar = () => {
         window.location.reload(); 
     };
 
+    // New function to toggle the profile card
+    const toggleProfileCard = () => {
+        setShowProfileCard(prev => !prev);
+    };
+
     // Conditional check for login status
     const isUserLoggedIn = sessionStorage.getItem("auth-token") !== null;
 
@@ -36,20 +44,14 @@ const Navbar = () => {
     const getUsername = () => {
         const userEmail = sessionStorage.getItem("email");
         if (userEmail) {
-            // Find the index of the @ symbol
             const atIndex = userEmail.indexOf('@');
             if (atIndex > 0) {
-                // Return the part of the string before the @ symbol
                 let namePart = userEmail.substring(0, atIndex);
-                
-                // Optional: Capitalize the first letter for a cleaner look
                 namePart = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-                
-                // Replace periods/underscores with spaces
                 return namePart.replace(/[._]/g, ' '); 
             }
         }
-        return "User"; // Fallback name
+        return "User";
     };
 
     return (
@@ -58,7 +60,6 @@ const Navbar = () => {
             <div className="nav__logo">
               <Link to="/"> 
                 StayHealthy 
-                {/* SVG Icon (JSX format) */}
                 <svg xmlns="http://www.w3.org/2000/svg" height="26" width="26" viewBox="0 0 1000 1000" style={{ fill: '#3685fb' }}>
                     <title>Doctor With Stethoscope SVG icon</title>
                     <g>
@@ -95,18 +96,29 @@ const Navbar = () => {
                     <Link to="/reviews">Reviews</Link> 
                 </li>
               
-                {/* CONDITIONAL RENDERING BLOCK: Display Name and Logout/Login/Sign Up */}
+                {/* CONDITIONAL RENDERING BLOCK: Display Profile Card or Login/Sign Up */}
                 {isUserLoggedIn ? (
-                    <>
-                        <li className="link user-name-display" style={{ marginRight: '10px', color: '#3685fb', fontWeight: 'bold' }}>
+                    <li className="link user-profile-link-container">
+                        {/* Button/Link to trigger the dropdown */}
+                        <button 
+                            className="user-name-button" 
+                            onClick={toggleProfileCard} 
+                            style={{ cursor: 'pointer', border: 'none', background: 'none', color: '#3685fb', fontWeight: 'bold' }}
+                        >
                             Hello, {getUsername()}
-                        </li>
-                        <li className="link">
-                            <button className="btn1" onClick={handleLogout}>
-                                Logout
-                            </button>
-                        </li>
-                    </>
+                        </button>
+
+                        {/* Conditional render of the ProfileCard dropdown */}
+                        {showProfileCard && (
+                            // Pass toggleProfileCard to onClose so clicking the X closes the card
+                            <ProfileCard onClose={toggleProfileCard} /> 
+                        )}
+                        
+                        {/* Simple Logout button remains for quick access */}
+                        <button className="btn1" onClick={handleLogout} style={{ marginLeft: '10px' }}>
+                            Logout
+                        </button>
+                    </li>
                 ) : (
                     // Display SIGN UP and LOGIN buttons if user is NOT logged in
                     <>
