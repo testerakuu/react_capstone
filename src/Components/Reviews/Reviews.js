@@ -1,7 +1,7 @@
-// src/Components/Reviews/Reviews.js
+// src/Components/Reviews/Reviews.js - COMPLETE CODE (with communication fix)
 
 import React, { useState } from 'react';
-import ReviewForm from '../ReviewForm/ReviewForm'; // Import the ReviewForm component
+import ReviewForm from '../ReviewForm/ReviewForm';
 import './Reviews.css';
 
 // Hardcoded dummy data to simulate past appointments
@@ -15,7 +15,7 @@ const Reviews = () => {
     // State to track the appointment selected for review
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     // State to manage which appointments have been reviewed (for disabling the button)
-    const [appointments, setAppointments] = useState(mockAppointments);
+    const [appointments, setAppointments] = useState(mockAppointments); // Initialized with mock data
 
     // Function to open the ReviewForm modal/view
     const openReviewForm = (appointment) => {
@@ -27,14 +27,16 @@ const Reviews = () => {
         setSelectedAppointment(null);
     };
 
-    // Function to handle submission confirmation (to disable the button)
+    // *** CRITICAL FUNCTION: Updates the state of the appointments array ***
     const handleReviewSubmitted = (appointmentId) => {
+        // 1. Map over the appointments state
         setAppointments(prevAppointments => 
             prevAppointments.map(app => 
+                // 2. If the ID matches the one submitted, set reviewed: true
                 app.id === appointmentId ? { ...app, reviewed: true } : app
             )
         );
-        closeReviewForm(); // Close the form after submission
+        // The closeReviewForm call is now handled by the ReviewForm after the timeout
     };
 
     return (
@@ -60,7 +62,7 @@ const Reviews = () => {
                                 <td>
                                     <button 
                                         onClick={() => openReviewForm(appointment)}
-                                        disabled={appointment.reviewed} // Disable if already reviewed
+                                        disabled={appointment.reviewed} // Disabled if true
                                         className={appointment.reviewed ? 'btn-disabled' : 'btn-active'}
                                     >
                                         {appointment.reviewed ? 'Feedback Submitted' : 'Click Here'}
@@ -80,7 +82,8 @@ const Reviews = () => {
                         doctorName={selectedAppointment.doctorName}
                         doctorSpeciality={selectedAppointment.doctorSpeciality}
                         onClose={closeReviewForm}
-                        // Pass a handler to update the table after submission
+                        
+                        // *** CRITICAL STEP: Pass the update handler down ***
                         onReviewSubmit={() => handleReviewSubmitted(selectedAppointment.id)} 
                     />
                 </div>

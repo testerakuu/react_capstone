@@ -1,10 +1,11 @@
-// src/Components/ReviewForm/ReviewForm.js
+// src/Components/ReviewForm/ReviewForm.js - COMPLETE CODE (with communication fix)
 
 import React, { useState } from 'react';
 import './ReviewForm.css';
 
 // Component for the Review Submission Form
-const ReviewForm = ({ doctorName, doctorSpeciality, onClose }) => {
+// IMPORTANT: It now accepts 'onReviewSubmit' as a prop
+const ReviewForm = ({ doctorName, doctorSpeciality, onClose, onReviewSubmit }) => {
     // State to hold the rating (1 to 5)
     const [rating, setRating] = useState(0);
     // State to hold the review comment
@@ -12,7 +13,7 @@ const ReviewForm = ({ doctorName, doctorSpeciality, onClose }) => {
     // State to handle submission status/feedback
     const [submitted, setSubmitted] = useState(false);
 
-    // Function to handle the form submission (Placeholder logic)
+    // Function to handle the form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         
@@ -27,10 +28,14 @@ const ReviewForm = ({ doctorName, doctorSpeciality, onClose }) => {
         // 2. Update state to show success message
         setSubmitted(true);
         
-        // 3. Optional: Set a timeout to automatically close the form after a delay
+        // 3. Set a timeout to automatically close the form after a delay
         setTimeout(() => {
-            onClose(); // Close the modal/form after submission
-        }, 2000);
+            // *** CRITICAL STEP: 
+            // 1. Call the parent function to update the table state (Reviewed: true)
+            onReviewSubmit(); 
+            // 2. Close the modal/form
+            onClose(); 
+        }, 2000); // Wait 2 seconds before closing
     };
 
     // JSX for the form layout
