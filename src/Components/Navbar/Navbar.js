@@ -1,37 +1,53 @@
 // src/Components/Navbar/Navbar.js
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // *** Added useNavigate ***
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 // Define the functional component
 const Navbar = () => {
     const [isActive, setIsActive] = useState(false);
-    const navigate = useNavigate(); // *** Initialize useNavigate for logout redirect ***
+    const navigate = useNavigate();
 
-    // Function to toggle the state of the mobile menu
     const handleClick = () => {
         setIsActive(!isActive);
     };
 
-    // *** 1. LOGOUT FUNCTION: Clears session and redirects ***
     const handleLogout = () => {
         sessionStorage.removeItem("auth-token");
         sessionStorage.removeItem("name");
         sessionStorage.removeItem("email");
         sessionStorage.removeItem("phone");
         
-        // Redirect to home page and force a reload to update the Navbar state
         navigate("/");
         window.location.reload(); 
     };
 
-    // *** 2. CONDITIONAL CHECK: Determine if the user is logged in ***
-    // This will be true if the 'auth-token' exists in sessionStorage
+    // Conditional check for login status
     const isUserLoggedIn = sessionStorage.getItem("auth-token") !== null;
+
+    // *** NEW HELPER FUNCTION: Extracts the name from the stored email ***
+    const getUsername = () => {
+        const userEmail = sessionStorage.getItem("email");
+        if (userEmail) {
+            // Find the index of the @ symbol
+            const atIndex = userEmail.indexOf('@');
+            if (atIndex > 0) {
+                // Return the part of the string before the @ symbol
+                let namePart = userEmail.substring(0, atIndex);
+                
+                // Optional: Capitalize the first letter for a cleaner look
+                namePart = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+                
+                // Replace periods/underscores with spaces
+                return namePart.replace(/[._]/g, ' '); 
+            }
+        }
+        return "User"; // Fallback name
+    };
 
     return (
         <nav>
-            {/* Navigation logo section */}
+            {/* Navigation logo section (same as before) */}
             <div className="nav__logo">
               <Link to="/"> 
                 StayHealthy 
@@ -50,32 +66,34 @@ const Navbar = () => {
               <span>.</span>
             </div>
             
-            {/* Navigation icon section with an onClick event listener */}
+            {/* Navigation icon section (same as before) */}
             <div className="nav__icon" onClick={handleClick}>
               <i className={`fa ${isActive ? 'fa-times' : 'fa-bars'}`}></i>
             </div>
 
-            {/* Unordered list for navigation links, dynamically applying the 'active' class */}
+            {/* Unordered list for navigation links */}
             <ul className={`nav__links ${isActive ? 'active' : ''}`}>
               
-                {/* Home link */}
                 <li className="link">
                     <Link to="/">Home</Link>
                 </li>
               
-                {/* Appointments link (Using <a> since it's an external/placeholder link) */}
                 <li className="link">
                     <a href="google.com">Appointments</a> 
                 </li>
               
-                {/* *** CONDITIONAL RENDERING BLOCK START *** */}
+                {/* *** CONDITIONAL RENDERING BLOCK: Display Name and Logout *** */}
                 {isUserLoggedIn ? (
-                    // Display LOGOUT button if user is logged in
-                    <li className="link">
-                        <button className="btn1" onClick={handleLogout}>
-                            Logout
-                        </button>
-                    </li>
+                    <>
+                        <li className="link user-name-display" style={{ marginRight: '10px', color: '#3685fb', fontWeight: 'bold' }}>
+                            Hello, {getUsername()}
+                        </li>
+                        <li className="link">
+                            <button className="btn1" onClick={handleLogout}>
+                                Logout
+                            </button>
+                        </li>
+                    </>
                 ) : (
                     // Display SIGN UP and LOGIN buttons if user is NOT logged in
                     <>
