@@ -1,96 +1,153 @@
-import React, { useState } from 'react';
-import './Login.css'; // Import the associated CSS file
+// src/Components/Login/Login.js - Complete and Corrected
+
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
+import './Login.css'; // Assuming you have a Login.css
 
 const Login = () => {
-    // State to hold form data (for controlled inputs)
-    const [formData, setFormData] = useState({
-        email: '', password: ''
-    });
-    
-    // Function to handle changes in input fields
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    // Function to handle form submission (for validation demonstration)
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Prevent default browser form submission
+  // State variables for form data and error messages
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [showerr, setShowerr] = useState(''); // State to show error messages
 
-        // Basic check to demonstrate control (browser's 'required' still runs first)
-        if (formData.email && formData.password) {
-            console.log("Login data is valid and ready to submit:", formData);
-            alert("Login form submitted successfully!");
+  // Get navigation function from react-router-dom
+  const navigate = useNavigate();
+
+  // Check if user is already authenticated, then redirect to home page
+  useEffect(() => {
+    if (sessionStorage.getItem("auth-token")) {
+      navigate("/");
+    }
+  }, [navigate]); // Added navigate to dependency array for best practice
+
+  // Function to handle login form submission
+  const login = async (e) => {
+    e.preventDefault();
+    setShowerr(''); // Clear previous errors
+
+    // Simple client-side check to ensure fields are filled
+    if (!email || !password) {
+        setShowerr('Please enter both email and password.');
+        return;
+    }
+
+    try {
+        // Send a POST request to the login API endpoint
+        const res = await fetch(`${API_URL}/api/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        });
+
+        // Parse the response JSON
+        const json = await res.json();
+        
+        if (json.authtoken) {
+            // SUCCESS: If authentication token is received, store it in session storage
+            sessionStorage.setItem('auth-token', json.authtoken);
+            sessionStorage.setItem('email', email); 
+            // Note: The backend should return the name/phone if you want to store them too,
+            // but we'll stick to what the lab code suggests: email.
+            
+            // Redirect to home page and reload the window
+            navigate('/');
+            window.location.reload();
         } else {
-             // This else block usually isn't hit due to required attribute, but good for custom validation
-             console.log("Please fill in all fields.");
+            // FAILURE: Handle error messages from the backend
+            if (json.errors) {
+                // 1. Handle validation errors (array of objects)
+                setShowerr(json.errors[0].msg);
+            } else if (json.error) {
+                // 2. Handle general backend errors (e.g., "Invalid Credentials")
+                // FIX for the "Objects are not valid" crash:
+                if (typeof json.error === 'object') {
+                    setShowerr(json.error.msg || "An unexpected error occurred during login.");
+                } else {
+                    setShowerr(json.error); // Display if it's a simple string error
+                }
+            } else {
+                // Fallback for unexpected response structure
+                setShowerr("An unknown login error occurred.");
+            }
         }
-    };
+    } catch (error) {
+        // Handle network errors (like 'Failed to fetch' if server is down)
+        setShowerr("Failed to connect to the server. Please check the backend terminal.");
+        console.error("Fetch error:", error);
+    }
+  };
 
-    return (
-        // Main container div for the page content
-        <div className="container">
-            {/* Div for login grid layout */}
-            <div className="login-grid">
-              {/* Div for login text */}
-              <div className="login-text">
-                <h2>Login</h2>
-              </div>
-              {/* Additional login text with a link to Sign Up page */}
-              <div className="login-text">
-                Are you a new member? 
-                <span>
-                    <a href="../Sign_Up/Sign_Up.html" style={{ color: '#2190FF' }}> Sign Up Here</a> {/* CHANGE: inline style to JSX object */}
-                </span>
-              </div>
-              <br />
-              {/* Div for login form */}
-              <div className="login-form">
-                <form onSubmit={handleSubmit}> {/* ADD onSubmit handler */}
-                  {/* Form group for email input */}
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label> {/* CHANGE: for to htmlFor */}
-                    <input 
-                      type="email" 
-                      name="email" 
-                      id="email" 
-                      required // Added 'required' attribute for basic validation
-                      className="form-control" // CHANGE: class to className
-                      placeholder="Enter your email" 
-                      aria-describedby="helpId"
-                      value={formData.email}
-                      onChange={handleChange}
-                    /> 
-                  </div>
-                  {/* Form group for password input */}
-                  <div className="form-group">
-                    <label htmlFor="password">Password</label> {/* CHANGE: for to htmlFor */}
-                    <input
-                      type="password" // Added type="password"
-                      name="password"
-                      id="password"
-                      required // Added 'required' attribute for basic validation
-                      className="form-control" // CHANGE: class to className
-                      placeholder="Enter your password"
-                      aria-describedby="helpId"
-                      value={formData.password}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {/* Button group for login and reset buttons */}
-                  <div className="btn-group">
-                    <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Login</button> {/* CHANGE: class to className */}
-                    <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">Reset</button> {/* CHANGE: class to className */}
-                  </div>
-                  <br />
-                  {/* Additional login text for 'Forgot Password' option */}
-                  <div className="login-text">
-                    Forgot Password?
-                  </div>
-                </form>
-              </div>
-            </div>
+  return (
+    <div>
+      <div className="container" style={{marginTop:'5%'}}>
+        <div className="login-grid">
+          <div className="login-text">
+            <h2>Login</h2>
           </div>
-    );
-};
+          <div className="login-text">
+            Are you a new member? 
+            <span>
+              <Link to="/signup" style={{ color: '#2190FF' }}>
+                Sign Up Here
+              </Link>
+            </span>
+          </div>
+          <br />
+          <div className="login-form">
+            <form onSubmit={login}>
+              
+              {/* Email Input Field */}
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  type="email" 
+                  name="email" 
+                  id="email" 
+                  className="form-control" 
+                  placeholder="Enter your email" 
+                  aria-describedby="helpId" 
+                />
+              </div>
+              
+              {/* Password Input Field (FIXED/COMPLETED) */}
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    name="password"
+                    id="password"
+                    className="form-control"
+                    placeholder="Enter your password"
+                    aria-describedby="helpId"
+                />
+              </div>
+
+              {/* Error Message Display */}
+              {showerr && <div className="err" style={{ color: 'red', marginTop: '10px' }}>{showerr}</div>}
+              
+              <div className="btn-group">
+                {/* Login button */}
+                <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default Login;
