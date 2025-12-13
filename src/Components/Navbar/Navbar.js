@@ -79,7 +79,7 @@ const Navbar = () => {
                 </li>
               
                 <li className="link">
-                    <a href="google.com">Appointments</a> 
+                    <Link to="/instant-consultation">Appointments</Link> 
                 </li>
               
                 {/* *** CONDITIONAL RENDERING BLOCK: Display Name and Logout *** */}

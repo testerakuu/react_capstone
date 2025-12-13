@@ -8,9 +8,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Import custom components
 import Navbar from './Components/Navbar/Navbar';
-import LandingPage from './Components/LandingPage/LandingPage'; // Updated to PascalCase without underscore
-import SignUp from './Components/Sign_Up/Sign_Up';               // New component import
-import Login from './Components/Login/Login';                   // New component import
+import LandingPage from './Components/LandingPage/LandingPage';
+import SignUp from './Components/Sign_Up/Sign_Up';               
+import Login from './Components/Login/Login';                   
+
+// *** NEW IMPORT ***
+import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
 
 
 // Function component for the main App
@@ -31,11 +34,14 @@ function App() {
             {/* 1. Define the Home route */}
             <Route path="/" element={<LandingPage/>}/>
             
-            {/* 2. Define the Sign Up route, matching the Link to="/signup" */}
+            {/* 2. Define the Sign Up route */}
             <Route path="/signup" element={<SignUp/>}/>
             
-            {/* 3. Define the Login route, matching the Link to="/login" */}
+            {/* 3. Define the Login route */}
             <Route path="/login" element={<Login/>}/>
+
+            {/* 4. *** NEW ROUTE for Instant Consultation *** */}
+            <Route path="/instant-consultation" element={<InstantConsultation/>}/>
 
           </Routes>
         </BrowserRouter>
