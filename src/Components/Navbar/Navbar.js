@@ -1,64 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // 1. Import useState
+import { Link } from 'react-router-dom'; // 2. Import Link for navigation
 import './Navbar.css'; // Import the CSS file
 
 // Define the functional component
 const Navbar = () => {
-    // 1. Use State to manage the active/inactive state of the menu
+    // 3. Use State to manage the active/inactive state of the mobile menu
     const [isActive, setIsActive] = useState(false);
 
-    // 2. Define the handleClick function using the state setter
+    // 4. Define the handleClick function to toggle the state
     const handleClick = () => {
-        setIsActive(!isActive); // Toggle the state
+        setIsActive(!isActive); // Toggle the state (true/false)
     };
 
     return (
         <nav>
             {/* Navigation logo section */}
             <div className="nav__logo">
-                {/* Link to the home page */}
-                <a href="/">
-                    StayHealthy 
-                    {/* SVG Icon (JSX format) */}
-                    <svg xmlns="http://www.w3.org/2000/svg" height="26" width="26" viewBox="0 0 1000 1000" style={{ fill: '#3685fb' }}>
-                        <title>Doctor With Stethoscope SVG icon</title>
+              {/* Use Link to navigate to the base path */}
+              <Link to="/"> 
+                StayHealthy 
+                {/* SVG Icon (JSX format) */}
+                <svg xmlns="http://www.w3.org/2000/svg" height="26" width="26" viewBox="0 0 1000 1000" style={{ fill: '#3685fb' }}>
+                    <title>Doctor With Stethoscope SVG icon</title>
+                    <g>
                         <g>
-                            <g>
-                                {/* Path for the stethoscope icon */}
-                                <path d="M499.8,10c91.7,0,166,74.3,166,166c0,91.7-74.3,166-166,166c-91.7,0-166-74.3-166-166C333.8,84.3,408.1,10,499.8,10z"></path>
-                                {/* Additional path for the icon */}
-                                <path d="M499.8,522.8c71.2,0,129.1-58.7,129.1-129.1H370.6C370.6,464.1,428.6,522.8,499.8,522.8z"></path>
-                                {/* Another path for the icon (truncated for brevity) */}
-                                <path d="M693.2,395c-0.7,94.9-70.3,173.7-160.8,188.9v155.9c0,80.3-60.7,150.8-140.8,155.3c-83,4.7-152.7-58.9-157.6-139.7c-22-12.8-35.6-38.5-30.3-66.7c4.7-25.1,25.5-45.6,50.8-49.9c39.7-6.7,74.1,23.7,74.1,62.1c0,23-12.3,43-30.7,54.1c4.7,45.4,45.1,80.4,92.6,76c44.6-4,77.2-44...."></path>
-                            </g>
+                            <path d="M499.8,10c91.7,0,166,74.3,166,166c0,91.7-74.3,166-166,166c-91.7,0-166-74.3-166-166C333.8,84.3,408.1,10,499.8,10z"></path>
+                            <path d="M499.8,522.8c71.2,0,129.1-58.7,129.1-129.1H370.6C370.6,464.1,428.6,522.8,499.8,522.8z"></path>
+                            <path d="M693.2,395c-0.7,94.9-70.3,173.7-160.8,188.9v155.9c0,80.3-60.7,150.8-140.8,155.3c-83,4.7-152.7-58.9-157.6-139.7c-22-12.8-35.6-38.5-30.3-66.7c4.7-25.1,25.5-45.6,50.8-49.9c39.7-6.7,74.1,23.7,74.1,62.1c0,23-12.3,43-30.7,54.1c4.7,45.4,45.1,80.4,92.6,76c44.6-4,77.2-44...."></path>
                         </g>
-                    </svg>
-                </a>
-                <span>.</span>
+                    </g>
+                </svg>
+              </Link>
+              <span>.</span>
             </div>
-
-            {/* Navigation icon section with the handleClick event */}
+            
+            {/* Navigation icon section with an onClick event listener */}
             <div className="nav__icon" onClick={handleClick}>
-                {/* Dynamically switch Font Awesome icons based on 'isActive' state */}
-                <i className={`fa ${isActive ? 'fa-times' : 'fa-bars'}`}></i>
+              {/* Dynamically switch icons based on the 'isActive' state */}
+              <i className={`fa ${isActive ? 'fa-times' : 'fa-bars'}`}></i>
             </div>
 
-            {/* Unordered list for navigation links, dynamically adding the 'active' class */}
+            {/* Unordered list for navigation links, dynamically applying the 'active' class */}
             <ul className={`nav__links ${isActive ? 'active' : ''}`}>
+              
+                {/* Home link */}
                 <li className="link">
-                    <a href="../Landing_Page/LandingPage.html">Home</a>
+                    <Link to="/">Home</Link>
                 </li>
+              
+                {/* Appointments link (Using <a> since it's an external/placeholder link) */}
                 <li className="link">
-                    <a href="https://www.google.com/">Appointments</a>
+                    <a href="google.com">Appointments</a> 
                 </li>
+              
+                {/* Sign Up link (Using Link to navigate to the /signup route) */}
                 <li className="link">
-                    <a href="../Sign_Up//Sign_Up.html">
+                    <Link to="/signup"> 
                         <button className="btn1">Sign Up</button>
-                    </a>
+                    </Link>
                 </li>
+              
+                {/* Login link (Using Link to navigate to the /login route) */}
                 <li className="link">
-                    <a href="../Login/Login.html">
+                    <Link to="/login">
                         <button className="btn1">Login</button>
-                    </a>
+                    </Link>
                 </li>
             </ul>
         </nav>
