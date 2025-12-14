@@ -1,82 +1,70 @@
 // src/Components/ProfileCard/ProfileCard.js - COMPLETE CODE
 
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
+import React, { useState, useEffect } from 'react';
 import './ProfileCard.css';
+import { Link, useNavigate } from 'react-router-dom';
 
-const ProfileCard = ({ onClose }) => {
+// Utility function to get user details from session storage
+const getUserDetails = () => {
+    return {
+        name: sessionStorage.getItem('name'),
+        email: sessionStorage.getItem('email'),
+        phone: sessionStorage.getItem('phone'),
+    };
+};
+
+const ProfileCard = ({ toggleProfileCard }) => {
+    // State to hold the current user details
+    const [userDetails, setUserDetails] = useState(getUserDetails());
     const navigate = useNavigate();
 
-    // Function to retrieve user details from sessionStorage
-    const getUserDetails = () => {
-        const email = sessionStorage.getItem('email');
-        const name = sessionStorage.getItem('name') || getUsernameFromEmail(email);
-        const phone = sessionStorage.getItem('phone');
+    // Effect to re-fetch details when the card is mounted/re-rendered 
+    // This keeps the displayed name updated if it was just changed in ProfileForm
+    useEffect(() => {
+        setUserDetails(getUserDetails());
+    }, []);
 
-        return { email, name, phone };
-    };
-
-    // Helper Function: Extracts a capitalized name from the email (used as a fallback)
-    const getUsernameFromEmail = (email) => {
-        if (!email) return "User";
-        let namePart = email.substring(0, email.indexOf('@'));
-        namePart = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-        return namePart.replace(/[._]/g, ' ');
-    };
-
+    // Function to handle the logout process
     const handleLogout = () => {
-        // Clear all stored authentication and user details
-        sessionStorage.removeItem("auth-token");
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("phone");
+        // Clear all session storage items related to user and auth
+        sessionStorage.clear(); 
         
-        // Clear persistent appointment data
-        localStorage.removeItem("doctorData");
-        sessionStorage.removeItem("appointmentData");
-
-        // Close the card and redirect
-        onClose(); 
-        navigate("/");
-        window.location.reload(); 
+        // Navigate the user to the login page
+        navigate('/login'); 
     };
-
-    const user = getUserDetails();
 
     return (
-        <div className="profile-card-dropdown">
-            <span className="close-btn" onClick={onClose}>&times;</span>
-            <div className="welcome-section">
-                Welcome, **{user.name}**
+        <div className="profile-card">
+            <div className="profile-card__details">
+                <h3 className="profile-card__name">Welcome, {userDetails.name || 'User'}</h3>
+                <p className="profile-card__email">{userDetails.email}</p>
+                <p className="profile-card__phone">{userDetails.phone}</p>
             </div>
             
-            <div className="profile-details-section">
-                <p className="profile-title">Your Profile</p>
-                <div className="detail-item">
-                    <label>Email:</label>
-                    <span>{user.email || 'N/A'}</span>
-                </div>
-                {/* Display phone only if it was stored */}
-                {user.phone && (
-                    <div className="detail-item">
-                        <label>Phone:</label>
-                        <span>{user.phone}</span>
-                    </div>
-                )}
+            <div className="profile-card__items">
+                {/* 1. View/Edit Profile Link (Existing) */}
+                <Link 
+                    to="/profile" 
+                    className="profile-card__item" 
+                    onClick={toggleProfileCard}
+                >
+                    View/Edit Profile
+                </Link>
+                
+                {/* 2. Your Reports Link (NEW - Required by Lab) */}
+                <Link 
+                    to="/reports" 
+                    className="profile-card__item" 
+                    onClick={toggleProfileCard}
+                >
+                    Your Reports
+                </Link>
+
+                {/* 3. Logout Button */}
+                <button className="profile-card__item logout" onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
-
-            {/* Link to the full ProfileForm page */}
-            <Link 
-                to="/profile" 
-                className="profile-view-btn" 
-                onClick={onClose} // Close the dropdown when the link is clicked
-            >
-                View/Edit Profile
-            </Link>
-
-            <button onClick={handleLogout} className="profile-logout-btn">
-                Logout
-            </button>
         </div>
     );
 };

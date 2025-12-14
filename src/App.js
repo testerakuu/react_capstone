@@ -1,67 +1,52 @@
-// src/App.js - COMPLETE AND UPDATED CODE
+// src/App.js - FINAL CORRECTED CODE (Using exact paths from your file tree)
 
-// Import necessary modules from React library
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './App.css';
 
-// Import components for routing from react-router-dom library
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// Import Components for Routing
+import Login from './Components/Login/Login'; 
+import Signup from './Components/Sign_Up/Sign_Up'; // Corrected path for Sign_up
 
-// Import custom components
 import Navbar from './Components/Navbar/Navbar';
 import LandingPage from './Components/LandingPage/LandingPage';
-import SignUp from './Components/Sign_Up/Sign_Up';               
-import Login from './Components/Login/Login';                   
 
-// Import the Instant Consultation component
-import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
+// --- CRITICAL FIX: The exact path for InstantConsultation ---
+// Path: Components -> InstantConsultationBooking -> FindDoctorSearchIC -> InstantConsultation
+import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation'; 
 
-// *** NEW IMPORT ***
-import Notification from './Components/Notification/Notification';
-import Reviews from './Components/Reviews/Reviews'; 
+import ReviewForm from './Components/ReviewForm/ReviewForm';
+import Reviews from './Components/Reviews/Reviews';
 import ProfileForm from './Components/ProfileForm/ProfileForm';
+import ReportsLayout from './Components/ReportsLayout/ReportsLayout';
 
-
-// Function component for the main App
 function App() {
-
-  // Render the main App component
   return (
-    // Use the fragment syntax <> </>
-    <>
-        {/* Set up BrowserRouter for routing */}
-        <BrowserRouter>
-          {/* Display the Navbar component outside of Routes so it shows on every page */}
-          <Navbar/>
-
-          {/* *** WRAP ROUTES WITH NOTIFICATION COMPONENT *** */}
-          <Notification> 
-              {/* Set up the Routes for different pages */}
-              <Routes>
-                
-                {/* 1. Define the Home route */}
-                <Route path="/" element={<LandingPage/>}/>
-                
-                {/* 2. Define the Sign Up route */}
-                <Route path="/signup" element={<SignUp/>}/>
-                
-                {/* 3. Define the Login route */}
-                <Route path="/login" element={<Login/>}/>
-
-                {/* 4. Define the Instant Consultation route */}
-                <Route path="/instant-consultation" element={<InstantConsultation/>}/>
-
-                {/* 5. Define the Reviews route */}
-                <Route path="/reviews" element={<Reviews/>}/>
-
-                {/* 6. Define the ProfileForm route*/}
-                <Route path="/profile" element={<ProfileForm/>}/>
-
-              </Routes>
-          </Notification>
-        </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        
+        {/* Main Routes */}
+        <Route path="/" element={<LandingPage />} />
+        
+        {/* INSTANT CONSULTATION ROUTE (Now using the correct component) */}
+        <Route path="/instant-consultation" element={<InstantConsultation />} />
+        
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/review-form" element={<ReviewForm />} />
+        
+        {/* Profile Routes */}
+        <Route path="/profile" element={<ProfileForm />} /> 
+        
+        {/* NEW ROUTE for Reports */}
+        <Route path="/reports" element={<ReportsLayout />} /> 
+        
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-// Export the App component as the default export
 export default App;
