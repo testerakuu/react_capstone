@@ -1,5 +1,5 @@
-export const API_URL = window.location.hostname === "localhost" ? "https://hollypederse-8181.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai" : "https://hollypederse-8181.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai";
-console.log(
-    "API_URL :",
-    API_URL
-);
+// src/config.js - Final attempt at API configuration
+
+export const API_URL = "/api"; 
+// Using the root path '/' tells the browser to use the current host and port (3000). 
+// The proxy setting will redirect '/api' requests.
