@@ -1,7 +1,7 @@
-// src/Components/ProfileCard/ProfileCard.js
+// src/Components/ProfileCard/ProfileCard.js - COMPLETE CODE
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
 import './ProfileCard.css';
 
 const ProfileCard = ({ onClose }) => {
@@ -35,7 +35,8 @@ const ProfileCard = ({ onClose }) => {
         localStorage.removeItem("doctorData");
         sessionStorage.removeItem("appointmentData");
 
-        // Redirect and force a full reload
+        // Close the card and redirect
+        onClose(); 
         navigate("/");
         window.location.reload(); 
     };
@@ -63,6 +64,15 @@ const ProfileCard = ({ onClose }) => {
                     </div>
                 )}
             </div>
+
+            {/* Link to the full ProfileForm page */}
+            <Link 
+                to="/profile" 
+                className="profile-view-btn" 
+                onClick={onClose} // Close the dropdown when the link is clicked
+            >
+                View/Edit Profile
+            </Link>
 
             <button onClick={handleLogout} className="profile-logout-btn">
                 Logout

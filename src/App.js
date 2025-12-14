@@ -18,6 +18,7 @@ import InstantConsultation from './Components/InstantConsultationBooking/Instant
 // *** NEW IMPORT ***
 import Notification from './Components/Notification/Notification';
 import Reviews from './Components/Reviews/Reviews'; 
+import ProfileForm from './Components/ProfileForm/ProfileForm';
 
 
 // Function component for the main App
@@ -51,6 +52,9 @@ function App() {
 
                 {/* 5. Define the Reviews route */}
                 <Route path="/reviews" element={<Reviews/>}/>
+
+                {/* 6. Define the ProfileForm route*/}
+                <Route path="/profile" element={<ProfileForm/>}/>
 
               </Routes>
           </Notification>
