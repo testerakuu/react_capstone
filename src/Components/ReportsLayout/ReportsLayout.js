@@ -1,7 +1,7 @@
-// src/Components/ReportsLayout/ReportsLayout.js - Exercise 5
+// src/Components/ReportsLayout/ReportsLayout.js - COMPLETE CODE (Final Version)
 
 import React from 'react';
-import './ReportsLayout.css'; // Don't forget to import the CSS!
+import './ReportsLayout.css'; 
 
 // Mock data to simulate reports fetched from an API
 const mockReports = [
@@ -12,13 +12,8 @@ const mockReports = [
 
 const ReportsLayout = () => {
 
-    const handleView = (reportId) => {
-        alert(`Viewing Report ID: ${reportId}`);
-    };
-
-    const handleDownload = (reportType) => {
-        alert(`Downloading Report: ${reportType}`);
-    };
+    // Note: Removed the handleView and handleDownload functions 
+    // as we are now using simple anchor tags for functionality.
 
     return (
         <div className="reports-layout-container">
@@ -45,18 +40,25 @@ const ReportsLayout = () => {
                                 <td>{report.specialty}</td>
                                 <td>{report.date}</td>
                                 <td className="reports-actions">
-                                    <button 
+                                    
+                                    {/* 1. View Report: Opens the PDF in a new tab */}
+                                    <a 
+                                        href="/patient_report.pdf" // Path to the file in the public folder
+                                        target="_blank" // Opens in a new tab
+                                        rel="noopener noreferrer" 
                                         className="btn-view"
-                                        onClick={() => handleView(report.id)}
                                     >
                                         View Report
-                                    </button>
-                                    <button 
+                                    </a>
+                                    
+                                    {/* 2. Download Report: Forces the browser to download the file */}
+                                    <a 
+                                        href="/patient_report.pdf" // Path to the file in the public folder
+                                        download={`patient_report_ID_${report.id}.pdf`} // Dynamic filename for download
                                         className="btn-download"
-                                        onClick={() => handleDownload(report.type)}
                                     >
                                         Download Report
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         ))}

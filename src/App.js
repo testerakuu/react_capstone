@@ -1,4 +1,4 @@
-// src/App.js - FINAL CORRECTED CODE (Using exact paths from your file tree)
+// src/App.js - FINAL CORRECTED CODE (Using exact paths from your instructions)
 
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -6,13 +6,12 @@ import './App.css';
 
 // Import Components for Routing
 import Login from './Components/Login/Login'; 
-import Signup from './Components/Sign_Up/Sign_Up'; // Corrected path for Sign_up
+import Signup from './Components/Sign_Up/Sign_Up'; // Corrected path for Sign_up folder/file
 
 import Navbar from './Components/Navbar/Navbar';
 import LandingPage from './Components/LandingPage/LandingPage';
 
-// --- CRITICAL FIX: The exact path for InstantConsultation ---
-// Path: Components -> InstantConsultationBooking -> FindDoctorSearchIC -> InstantConsultation
+// --- CRITICAL FIX: Using your exact path for InstantConsultation ---
 import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation'; 
 
 import ReviewForm from './Components/ReviewForm/ReviewForm';
@@ -32,7 +31,7 @@ function App() {
         {/* Main Routes */}
         <Route path="/" element={<LandingPage />} />
         
-        {/* INSTANT CONSULTATION ROUTE (Now using the correct component) */}
+        {/* INSTANT CONSULTATION ROUTE */}
         <Route path="/instant-consultation" element={<InstantConsultation />} />
         
         <Route path="/reviews" element={<Reviews />} />
